@@ -1,0 +1,63 @@
+import {Component} from '@angular/core';
+import {Note} from './note';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  my_notes = [
+    {id: 1, title: 'Note 1', description: 'Description for note 1'},
+    {id: 2, title: 'Note 2', description: 'Description for note 2'},
+    {id: 3, title: 'Note 3', description: 'Description for note 3'},
+    {id: 4, title: 'Note 4', description: 'Description for note 4'},
+  ];
+  show_form = false;
+  editing = false;
+  note: Note = new Note();
+
+  addNote() {
+    this.editing = false;
+    this.show_form = true;
+    this.note = new Note();
+  }
+
+  cancelNote() {
+    this.editing = false;
+    this.show_form = false;
+    this.note = new Note();
+  }
+
+  saveNote() {
+    if (this.editing) {
+      var me = this;
+      this.my_notes.forEach(function (value, index) {
+        if (value.id === me.note.id) {
+          me.my_notes[index] = me.note;
+        }
+      });
+      this.show_form = false;
+    } else {
+      this.show_form = false;
+      this.note.id = Date.now();
+      this.my_notes.push(this.note);
+    }
+  }
+
+  selectedNote(note) {
+    this.note = note;
+    this.show_form = true;
+    this.editing = true;
+  }
+
+  deleteNote() {
+    var me = this;
+    this.my_notes.forEach(function (value, index) {
+      if (value.id === me.note.id) {
+        me.my_notes.slice(index, 1);
+      }
+    });
+    this.show_form = false;
+  }
+}
